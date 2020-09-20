@@ -100,7 +100,7 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Bikes Rentals"
       subtitle = "Fluctuations in the bikes rented in UK"
-      image = "bike.jpg"
+      image = "bike.png"
       url = "blogs/bikerentals"
 
     [[params.tiles.showcase]]
