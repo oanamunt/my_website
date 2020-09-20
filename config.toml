@@ -41,7 +41,7 @@ disqusShortname = ""
     subtitle = "My portofolio webpage"
     menu = "Menu"
     # Optional logo as brand stored in img/
-    # logo = "logo.png"
+    #logo = "logo.png"
 
     [[params.navigation.links]]
       name = "Home"
@@ -51,13 +51,13 @@ disqusShortname = ""
       name = "Blogs"
       url = "blogs"
 
-    [[params.navigation.links]]
-      name = "Generic Blog"
-      url = "blogs/ipsum"
+    #[[params.navigation.links]]
+      #name = "Generic Blog"
+      #url = "blogs/ipsum"
 
-    [[params.navigation.links]]
-      name = "Elements"
-      url = "elements.html"
+   # [[params.navigation.links]]
+     # name = "Elements"
+      #url = "elements.html"
 
     # Add custom links here by uncommenting code below. To remove links just delete
     # the [[params.navigation.links]] map associated with that link. Copy and paste
@@ -68,8 +68,8 @@ disqusShortname = ""
 
     # Button Style 1
     [[params.navigation.button1]]
-      name = "See my project"
-      url = "blogs"
+      name = "CV"
+      url = "blogs/cv"
 
     # Button Style 2
     #[[params.navigation.button2]]
@@ -82,8 +82,8 @@ disqusShortname = ""
     # To change the background image on the homepage banner, replace 'banner.jpg' in
     # the 'static/img' folder.
     title = "Hi, my name is Oana"
-    subtitle = "A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP\nAND RELEASED UNDER THE CREATIVE COMMONS."
-    buttonText = "Get Started"
+    subtitle = "I am a student at London Business School, performing a Msc in Analytics and Management. I would like to show you some examples of my work."
+    buttonText = "See Projects"
 
 
   # Tiles Section
@@ -92,40 +92,40 @@ disqusShortname = ""
     # Display your showcases here.
     
     [[params.tiles.showcase]]
-      title = "Fashion"
-      subtitle = "Fashion blog"
+      title = "CV"
+      subtitle = "See my CV"
+      image = "cvpic.jpg"
+      url = "blogs/CV"
+
+    [[params.tiles.showcase]]
+      title = "Bikes Rentals"
+      subtitle = "Fluctuations in the bikes rented in UK"
+      image = "bike.jpg"
+      url = "blogs/bikerentals"
+
+    [[params.tiles.showcase]]
+      title = "Brexit"
+      subtitle = "Which Countries voted for Brexit?"
+      image = "brexpic.jpg"
+      url = "blogs/brexit"
+
+    [[params.tiles.showcase]]
+      title = "Airbnb -Word Cloud"
+      subtitle = "Which Airbnbs are more expensive in Singapore?"
       image = "pic04.jpg"
-      url = "blogs/fashion"
+      url = "blogs/"
 
-    [[params.tiles.showcase]]
-      title = "Tempus"
-      subtitle = "Feugiat Amet Tempus"
-      image = "pic03.jpg"
-      url = "blogs/tempus"
+    #[[params.tiles.showcase]]
+      #title = "Consequat"
+     # subtitle = "Ipsum Dolor Sit Amet"
+      #image = "pic05.jpg"
+      #url = "blogs/ipsum"
 
-    [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
-      image = "pic03.jpg"
-      url = "blogs/magna"
-
-    [[params.tiles.showcase]]
-      title = "Ipsum"
-      subtitle = "Nisl Sed Aliquam"
-      image = "pic04.jpg"
-      url = "blogs/ipsum"
-
-    [[params.tiles.showcase]]
-      title = "Consequat"
-      subtitle = "Ipsum Dolor Sit Amet"
-      image = "pic05.jpg"
-      url = "blogs/ipsum"
-
-    [[params.tiles.showcase]]
-      title = "Etiam"
-      subtitle = "Feugiat Amet Tempus"
-      image = "pic06.jpg"
-      url = "blogs/ipsum"
+    #[[params.tiles.showcase]]
+     # title = "Etiam"
+      #subtitle = "Feugiat Amet Tempus"
+      #image = "pic06.jpg"
+      #url = "blogs/ipsum"
     # You can make more showcases by copy and pasting the code above
 
   [params.blog]
@@ -136,16 +136,16 @@ disqusShortname = ""
     # To add more blogs just copy and paste the code.
 
   # Section Type Two
-  [params.two]
-    enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
-    buttonText = "Get Started"
-    url = "blogs"
+  #[params.two]
+    #enable = true
+    #title = "If you like my projects, feel free to contact me!"
+    #subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
+    #Mauris aliquet magna magna sed nunc rhoncus pharetra. 
+    #Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
+    #Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
+    #Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
+    #buttonText = "Get Started"
+    #url = "blogs"
 
 
   # Contact section
@@ -187,7 +187,7 @@ disqusShortname = ""
   # Footer section
   [params.footer]
     enable = true
-    copyright = "Company Name"
+    copyright = "Oana Muntean"
 
     # Uses font awesome icons
     #[[params.footer.social]]

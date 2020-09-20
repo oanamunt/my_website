@@ -1,0 +1,126 @@
+---
+title: "Who voted for Brexit?"
+author: "Oana Muntean"
+date: "`r Sys.Date()`"
+description: Does party affiliation relate to voting for/agains Brexit? What about having a degree? Or being born in the UK?
+draft: FALSE
+slug: brexit
+#image: brexit.jpg
+---
+
+Brexit was indeed a major event for UK. While Brexit is said to be caused by gear of immigration, we will look at some variables such as party affiliation and, percentage of uk residents born in the uk and percentage of voters having a university degree , of specific counties of UK. 
+The data comes from [Elliott Morris](https://www.thecrosstab.com/), who cleaned it and made it available through his [DataCamp class on analysing election and polling data in R](https://www.datacamp.com/courses/analyzing-election-and-polling-data-in-r).
+
+
+
+```{r load-libraries, echo=FALSE, include = FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readr)
+library(mosaic)
+library(ggthemes)
+library(GGally)
+library(readxl)
+library(here)
+library(skimr)
+library(janitor)
+library(broom)
+library(tidyquant)
+library(infer)
+library(openintro)
+library(knitr)
+library(httr)
+library(readxl)
+library(vroom)
+library(ggrepel)
+library(knitr)
+library(ggpubr)
+library(scales)
+library(tidytext)
+```
+```
+We first read the file and glimse over it.
+```{r readingdata, echo=TRUE}
+url <- "https://assets.datacamp.com/production/repositories/1934/datasets/7c5ad33c949eb0042d50f8c18d538cde0c7bf4e7/brexit_results.csv"
+# Download TFL data to temporary file
+httr::GET(url, write_disk(brexit.temp <- tempfile(fileext = ".csv")))
+# Use read_excel to read it as dataframe
+brexit_results <- read_csv(brexit.temp)
+
+kable(head(brexit_results,5))
+
+```
+
+One may observe that the data in the brexit_results file is untidy, and we may want to use pivot_longer to put all the party percentages in the same column called 'parpercent', and the name of the party in the colomn 'party'.
+
+```{r tidying_data, echo=TRUE}
+# Tide data
+brexit_results1<-brexit_results %>% 
+  
+  # Pivot longer
+  pivot_longer(names_to= 'party', values_to='parpercent', cols=c(con_2015, lab_2015, ld_2015, ukip_2015)) %>% 
+  # Select variables of interest
+  select(leave_share, party, parpercent)
+# Show results
+kable(head(brexit_results1,5))
+```
+We color each party with its specific  hex color, and we add each corespondence to a vector called pal. 
+```{r graphics, echo=TRUE}
+# Create vector
+pal <- c(
+  "ld_2015" = "#FDBB30",
+  "con_2015" = "#0087dc", 
+  "lab_2015" = "#d50000", 
+  "ukip_2015" = "#EFE600")
+# Create ggplot
+ggplot(brexit_results1, aes(x=parpercent,leave_share, color=party))+
+  
+  geom_point(aes(color=factor(party)), shape=21, size=0.1, alpha=0.1)+#display different points, colored according to different parties
+  
+  geom_jitter(alpha = 0.3)+ #adjust transparency, make the points more visible
+  
+  
+  scale_color_manual(name=NULL, values=pal, labels=c("Conservative", "Labour", 'Lib Dems', 'UKIP'))+ #change points according to party colors, change legend labels names
+  
+  geom_smooth(method=lm)+ #to create the lines
+  
+  theme_light()+ 
+  theme(legend.position="bottom")+ #we moved the legend from right to bottom 
+  
+  labs(title='How political affiliation translated to Brexit voting', x='Party % in the UK general elections', y='Leave % in the 2016 Brexit referendum')
+```
+Looking at the graph, one may observe that the more the county is affiliated with UKIP, the more likely they are to vote for leave. The line is quite steep, which makes us think that the two variables are indeed correlated. 
+Conversely, the more the country is affiliated with Liberal Democrats party, the more likely the citizens are to vote agains Brexit.
+
+```{r brex_bornuk, echo=TRUE}
+ggplot(brexit_results, aes(x = born_in_uk, y = leave_share)) +
+  geom_point(alpha=0.25) +
+  geom_smooth(method = "lm", col='#FFC0CB') +
+  theme_minimal() +
+  labs(title = "People born in UK scared of immigration?",
+x = " Percent of UK Resident Born in the UK",
+y = " Percent of votes cast in favor of Brexit ")
+
+```
+ We can notice a high concetration of votes in the upper right corner, telling us that in the counties with high percentage of people born in the UK, there was a high percentage of votes in favor of Brexit.
+ 
+```{r brex_degree, echo=TRUE}
+sum(is.na(brexit_results$degree)) #Checking if there are any missing values
+degree_brex<-brexit_results %>% 
+  filter(degree!= "NA") #filter for non missing values
+  
+  
+hey<-ggplot(degree_brex, aes(x = degree, y = leave_share)) +
+  geom_point(alpha=0.2) +
+  #add pink regression line
+  geom_smooth(method = "lm", col='#FF1493') +
+  #change theme
+  theme_minimal() +
+  #add labels
+  labs(title = "More people without a degree voted for Brexit!",
+x = " Percent of UK Residents in a County Having a Degree",
+y = " Percent of votes cast in favor of Brexit ", 
+source= "https://www.thecrosstab.com/")
+
+hey
+```
+We can thus infer that conties lower percentages of degree votes for Brexit more, as the line sharply decreses when the percentage of degrees increses. If only the people were more educated so Brexit would not have happened!

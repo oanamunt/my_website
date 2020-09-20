@@ -6,18 +6,28 @@
     <description>Recent content on Portfolio website for Oana Muntean</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Oct 2017 22:42:51 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 20 Sep 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Aliquam</title>
-      <link>/blogs/aliquam/</link>
-      <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
+      <title>Bike Rentals</title>
+      <link>/blogs/bikerentals/</link>
+      <pubDate>Sun, 20 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>/blogs/aliquam/</guid>
-      <description></description>
+      <guid>/blogs/bikerentals/</guid>
+      <description>Excess rentals in TfL bike sharingHow did the bike rentals volume fluctuate in the last years?The data comes from public Government data on Tlf bike sharing and can be downloaded from (this)[https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx] link. We will use TfL data on how many bikes were hired every single day. We can get the latest data by running the following:
+url &amp;lt;- &amp;quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&amp;quot;# Download TFL data to temporary filehttr::GET(url, write_disk(bike.</description>
+    </item>
+    
+    <item>
+      <title>Who voted for Brexit?</title>
+      <link>/blogs/brexit/</link>
+      <pubDate>Sun, 20 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/brexit/</guid>
+      <description>Brexit was indeed a major event for UK. While Brexit is said to be caused by gear of immigration, we will look at some variables such as party affiliation and, percentage of uk residents born in the uk and percentage of voters having a university degree , of specific counties of UK.The data comes from Elliott Morris, who cleaned it and made it available through his DataCamp class on analysing election and polling data in R.</description>
     </item>
     
     <item>
@@ -56,6 +66,24 @@
       <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
 You can embed an R code chunk like this:
 summary(cars)## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+    </item>
+    
+    <item>
+      <title>CV</title>
+      <link>/blogs/cv/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/cv/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CV</title>
+      <link>/blogs/cv/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/cv/</guid>
+      <description></description>
     </item>
     
   </channel>

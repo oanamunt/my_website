@@ -1,0 +1,361 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="This is a website to show some of my projects.">
+	<meta name="author" content="Oana Muntean">
+	<meta name="generator" content="Hugo 0.74.3" />
+	<title>Who voted for Brexit? &middot; Portfolio website for Oana Muntean</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Oana</strong> <span>My portofolio webpage</span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+                <li><a href="/blogs">Blogs</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs/cv" class="button special fit">CV</a></li>
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>Who voted for Brexit?</h1>
+                            </header>
+                            
+                            
+
+
+<p>Brexit was indeed a major event for UK. While Brexit is said to be caused by gear of immigration, we will look at some variables such as party affiliation and, percentage of uk residents born in the uk and percentage of voters having a university degree , of specific counties of UK.
+The data comes from <a href="https://www.thecrosstab.com/">Elliott Morris</a>, who cleaned it and made it available through his <a href="https://www.datacamp.com/courses/analyzing-election-and-polling-data-in-r">DataCamp class on analysing election and polling data in R</a>.</p>
+<pre><code>We first read the file and glimse over it.
+
+```r
+url &lt;- &quot;https://assets.datacamp.com/production/repositories/1934/datasets/7c5ad33c949eb0042d50f8c18d538cde0c7bf4e7/brexit_results.csv&quot;
+# Download TFL data to temporary file
+httr::GET(url, write_disk(brexit.temp &lt;- tempfile(fileext = &quot;.csv&quot;)))</code></pre>
+<pre><code>## Response [https://assets.datacamp.com/production/repositories/1934/datasets/7c5ad33c949eb0042d50f8c18d538cde0c7bf4e7/brexit_results.csv]
+##   Date: 2020-09-20 12:59
+##   Status: 200
+##   Content-Type: &lt;unknown&gt;
+##   Size: 71.4 kB
+## &lt;ON DISK&gt;  C:\Users\Public\Documents\Wondershare\CreatorTemp\RtmpUT0wIX\file44f418a14c95.csv</code></pre>
+<pre class="r"><code># Use read_excel to read it as dataframe
+brexit_results &lt;- read_csv(brexit.temp)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Seat = col_character(),
+##   con_2015 = col_double(),
+##   lab_2015 = col_double(),
+##   ld_2015 = col_double(),
+##   ukip_2015 = col_double(),
+##   leave_share = col_double(),
+##   born_in_uk = col_double(),
+##   male = col_double(),
+##   unemployed = col_double(),
+##   degree = col_double(),
+##   age_18to24 = col_double()
+## )</code></pre>
+<pre class="r"><code>kable(head(brexit_results,5))</code></pre>
+<table style="width:100%;">
+<colgroup>
+<col width="20%" />
+<col width="7%" />
+<col width="7%" />
+<col width="6%" />
+<col width="8%" />
+<col width="9%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Seat</th>
+<th align="right">con_2015</th>
+<th align="right">lab_2015</th>
+<th align="right">ld_2015</th>
+<th align="right">ukip_2015</th>
+<th align="right">leave_share</th>
+<th align="right">born_in_uk</th>
+<th align="right">male</th>
+<th align="right">unemployed</th>
+<th align="right">degree</th>
+<th align="right">age_18to24</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Aldershot</td>
+<td align="right">50.592</td>
+<td align="right">18.333</td>
+<td align="right">8.824</td>
+<td align="right">17.867</td>
+<td align="right">57.89777</td>
+<td align="right">83.10464</td>
+<td align="right">49.89896</td>
+<td align="right">3.637000</td>
+<td align="right">13.870661</td>
+<td align="right">9.406093</td>
+</tr>
+<tr class="even">
+<td align="left">Aldridge-Brownhills</td>
+<td align="right">52.050</td>
+<td align="right">22.369</td>
+<td align="right">3.367</td>
+<td align="right">19.624</td>
+<td align="right">67.79635</td>
+<td align="right">96.12207</td>
+<td align="right">48.92951</td>
+<td align="right">4.553607</td>
+<td align="right">9.974114</td>
+<td align="right">7.325850</td>
+</tr>
+<tr class="odd">
+<td align="left">Altrincham and Sale West</td>
+<td align="right">52.994</td>
+<td align="right">26.686</td>
+<td align="right">8.383</td>
+<td align="right">8.011</td>
+<td align="right">38.58780</td>
+<td align="right">90.48566</td>
+<td align="right">48.90621</td>
+<td align="right">3.039963</td>
+<td align="right">28.600135</td>
+<td align="right">6.437453</td>
+</tr>
+<tr class="even">
+<td align="left">Amber Valley</td>
+<td align="right">43.979</td>
+<td align="right">34.781</td>
+<td align="right">2.975</td>
+<td align="right">15.887</td>
+<td align="right">65.29912</td>
+<td align="right">97.30437</td>
+<td align="right">49.21657</td>
+<td align="right">4.261173</td>
+<td align="right">9.336294</td>
+<td align="right">7.747801</td>
+</tr>
+<tr class="odd">
+<td align="left">Arundel and South Downs</td>
+<td align="right">60.788</td>
+<td align="right">11.197</td>
+<td align="right">7.192</td>
+<td align="right">14.438</td>
+<td align="right">49.70111</td>
+<td align="right">93.33793</td>
+<td align="right">48.00189</td>
+<td align="right">2.468100</td>
+<td align="right">18.775592</td>
+<td align="right">5.734730</td>
+</tr>
+</tbody>
+</table>
+<p>One may observe that the data in the brexit_results file is untidy, and we may want to use pivot_longer to put all the party percentages in the same column called ‘parpercent’, and the name of the party in the colomn ‘party’.</p>
+<pre class="r"><code># Tide data
+brexit_results1&lt;-brexit_results %&gt;% 
+  
+  # Pivot longer
+  pivot_longer(names_to= &#39;party&#39;, values_to=&#39;parpercent&#39;, cols=c(con_2015, lab_2015, ld_2015, ukip_2015)) %&gt;% 
+  # Select variables of interest
+  select(leave_share, party, parpercent)
+# Show results
+kable(head(brexit_results1,5))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">leave_share</th>
+<th align="left">party</th>
+<th align="right">parpercent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">57.89777</td>
+<td align="left">con_2015</td>
+<td align="right">50.592</td>
+</tr>
+<tr class="even">
+<td align="right">57.89777</td>
+<td align="left">lab_2015</td>
+<td align="right">18.333</td>
+</tr>
+<tr class="odd">
+<td align="right">57.89777</td>
+<td align="left">ld_2015</td>
+<td align="right">8.824</td>
+</tr>
+<tr class="even">
+<td align="right">57.89777</td>
+<td align="left">ukip_2015</td>
+<td align="right">17.867</td>
+</tr>
+<tr class="odd">
+<td align="right">67.79635</td>
+<td align="left">con_2015</td>
+<td align="right">52.050</td>
+</tr>
+</tbody>
+</table>
+<p>We color each party with its specific hex color, and we add each corespondence to a vector called pal.</p>
+<pre class="r"><code># Create vector
+pal &lt;- c(
+  &quot;ld_2015&quot; = &quot;#FDBB30&quot;,
+  &quot;con_2015&quot; = &quot;#0087dc&quot;, 
+  &quot;lab_2015&quot; = &quot;#d50000&quot;, 
+  &quot;ukip_2015&quot; = &quot;#EFE600&quot;)
+# Create ggplot
+ggplot(brexit_results1, aes(x=parpercent,leave_share, color=party))+
+  
+  geom_point(aes(color=factor(party)), shape=21, size=0.1, alpha=0.1)+#display different points, colored according to different parties
+  
+  geom_jitter(alpha = 0.3)+ #adjust transparency, make the points more visible
+  
+  
+  scale_color_manual(name=NULL, values=pal, labels=c(&quot;Conservative&quot;, &quot;Labour&quot;, &#39;Lib Dems&#39;, &#39;UKIP&#39;))+ #change points according to party colors, change legend labels names
+  
+  geom_smooth(method=lm)+ #to create the lines
+  
+  theme_light()+ 
+  theme(legend.position=&quot;bottom&quot;)+ #we moved the legend from right to bottom 
+  
+  labs(title=&#39;How political affiliation translated to Brexit voting&#39;, x=&#39;Party % in the UK general elections&#39;, y=&#39;Leave % in the 2016 Brexit referendum&#39;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/blogs/blog6_files/figure-html/graphics-1.png" width="672" />
+Looking at the graph, one may observe that the more the county is affiliated with UKIP, the more likely they are to vote for leave. The line is quite steep, which makes us think that the two variables are indeed correlated.
+Conversely, the more the country is affiliated with Liberal Democrats party, the more likely the citizens are to vote agains Brexit.</p>
+<pre class="r"><code>ggplot(brexit_results, aes(x = born_in_uk, y = leave_share)) +
+  geom_point(alpha=0.25) +
+  geom_smooth(method = &quot;lm&quot;, col=&#39;#FFC0CB&#39;) +
+  theme_minimal() +
+  labs(title = &quot;People born in UK scared of immigration?&quot;,
+x = &quot; Percent of UK Resident Born in the UK&quot;,
+y = &quot; Percent of votes cast in favor of Brexit &quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/blogs/blog6_files/figure-html/brex_bornuk-1.png" width="672" />
+We can notice a high concetration of votes in the upper right corner, telling us that in the counties with high percentage of people born in the UK, there was a high percentage of votes in favor of Brexit.</p>
+<pre class="r"><code>sum(is.na(brexit_results$degree)) #Checking if there are any missing values</code></pre>
+<pre><code>## [1] 59</code></pre>
+<pre class="r"><code>degree_brex&lt;-brexit_results %&gt;% 
+  filter(degree!= &quot;NA&quot;) #filter for non missing values
+  
+  
+hey&lt;-ggplot(degree_brex, aes(x = degree, y = leave_share)) +
+  geom_point(alpha=0.2) +
+  #add pink regression line
+  geom_smooth(method = &quot;lm&quot;, col=&#39;#FF1493&#39;) +
+  #change theme
+  theme_minimal() +
+  #add labels
+  labs(title = &quot;More people without a degree voted for Brexit!&quot;,
+x = &quot; Percent of UK Residents in a County Having a Degree&quot;,
+y = &quot; Percent of votes cast in favor of Brexit &quot;, 
+source= &quot;https://www.thecrosstab.com/&quot;)
+
+hey</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/blogs/blog6_files/figure-html/brex_degree-1.png" width="672" />
+We can thus infer that conties lower percentages of degree votes for Brexit more, as the line sharply decreses when the percentage of degrees increses. If only the people were more educated so Brexit would not have happened!</p>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://github.com/oanamunt" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com/in/oanamntn/" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; Oana Muntean</li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>
