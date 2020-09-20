@@ -105,14 +105,14 @@ disqusShortname = ""
 
     [[params.tiles.showcase]]
       title = "Brexit"
-      subtitle = "Which Countries voted for Brexit?"
-      image = "brexpic.jpg"
+      subtitle = "Which Counties voted for Brexit?"
+      image = "brexpic.png"
       url = "blogs/brexit"
 
     [[params.tiles.showcase]]
       title = "Airbnb - WordCloud and Some Other Exploratory Analysis"
       subtitle = "Which Airbnbs are more expensive in Singapore?"
-      image = "wordcloud-1.jpg"
+      image = "airbnbpic.png"
       url = "blogs/airbnb"
 
     #[[params.tiles.showcase]]
@@ -216,6 +216,6 @@ disqusShortname = ""
       label = "LinkedIn"
 
     #[[params.footer.quicklinks]]
-      #text = "Design: "
+     # text = "Design: "
       #url= "https://www.html5up.net"
-      #alt = "HTML5 UP"
+    #alt = "HTML5 UP"
