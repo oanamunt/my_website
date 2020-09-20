@@ -1,5 +1,5 @@
 ---
-title: "Who voted for Brexit?"
+title: "Who Voted in favor of Brexit?"
 author: "Oana Muntean"
 date: "2020-09-20"
 description: Does party affiliation relate to voting for/agains Brexit? What about having a degree? Or being born in the UK?
@@ -19,11 +19,11 @@ url &lt;- &quot;https://assets.datacamp.com/production/repositories/1934/dataset
 # Download TFL data to temporary file
 httr::GET(url, write_disk(brexit.temp &lt;- tempfile(fileext = &quot;.csv&quot;)))</code></pre>
 <pre><code>## Response [https://assets.datacamp.com/production/repositories/1934/datasets/7c5ad33c949eb0042d50f8c18d538cde0c7bf4e7/brexit_results.csv]
-##   Date: 2020-09-20 12:59
+##   Date: 2020-09-20 18:57
 ##   Status: 200
 ##   Content-Type: &lt;unknown&gt;
 ##   Size: 71.4 kB
-## &lt;ON DISK&gt;  C:\Users\Public\Documents\Wondershare\CreatorTemp\RtmpUT0wIX\file44f418a14c95.csv</code></pre>
+## &lt;ON DISK&gt;  C:\Users\Public\Documents\Wondershare\CreatorTemp\RtmpsNG4q0\file590465355b16.csv</code></pre>
 <pre class="r"><code># Use read_excel to read it as dataframe
 brexit_results &lt;- read_csv(brexit.temp)</code></pre>
 <pre><code>## Parsed with column specification:

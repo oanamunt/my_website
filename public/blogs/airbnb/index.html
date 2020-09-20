@@ -1,0 +1,513 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="This is a website to show some of my projects.">
+	<meta name="author" content="Oana Muntean">
+	<meta name="generator" content="Hugo 0.74.3" />
+	<title>Airbnb - WordCloud and Some Other Exploratory Analysis &middot; Portfolio website for Oana Muntean</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Oana</strong> <span>My portofolio webpage</span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+                <li><a href="/blogs">Blogs</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs/cv" class="button special fit">CV</a></li>
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>Airbnb - WordCloud and Some Other Exploratory Analysis</h1>
+                            </header>
+                            
+                            
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In this project, we will show some visualizations of the Airbnb listings in Singapore. The data can be obtained from AirBnB insideairbnb.com; it was originally scraped from airbnb.com.</p>
+</div>
+<div id="exploratory-data-analysis" class="section level1">
+<h1>Exploratory Data Analysis</h1>
+<p>To begin with our project, we are going to load the <code>listings.csv</code> dataset and get and explore it.</p>
+<p>The first step is some data cleaning.</p>
+<div id="data-wrangling" class="section level2">
+<h2>Data Wrangling</h2>
+<p>We will use the <code>clean_names()</code> function from the <code>janitor</code> library to clean the name of the columns. This will turn <code>upper cases</code> into <code>lower cases</code>, delete <code>parentheses</code>, and replace <code>spaces</code> with <code>underscores</code>.</p>
+<pre class="r"><code># Clean names
+airbnb &lt;- airbnb %&gt;% 
+  clean_names()</code></pre>
+<p>We can now take a look at our data</p>
+<pre class="r"><code># Take a glimpse - airbnb
+glimpse(airbnb)</code></pre>
+<pre><code>## Rows: 7,323
+## Columns: 106
+## $ id                                           &lt;dbl&gt; 49091, 50646, 56334, 7...
+## $ listing_url                                  &lt;chr&gt; &quot;https://www.airbnb.co...
+## $ scrape_id                                    &lt;dbl&gt; 2.020062e+13, 2.020062...
+## $ last_scraped                                 &lt;date&gt; 2020-06-22, 2020-06-2...
+## $ name                                         &lt;chr&gt; &quot;COZICOMFORT LONG TERM...
+## $ summary                                      &lt;chr&gt; NA, &quot;Fully furnished b...
+## $ space                                        &lt;chr&gt; &quot;This is Room No. 2.(a...
+## $ description                                  &lt;chr&gt; &quot;This is Room No. 2.(a...
+## $ experiences_offered                          &lt;chr&gt; &quot;none&quot;, &quot;none&quot;, &quot;none&quot;...
+## $ neighborhood_overview                        &lt;chr&gt; NA, &quot;The serenity &amp; qu...
+## $ notes                                        &lt;chr&gt; NA, &quot;Accommodation has...
+## $ transit                                      &lt;chr&gt; NA, &quot;Less than 400m fr...
+## $ access                                       &lt;chr&gt; NA, &quot;Kitchen, washing ...
+## $ interaction                                  &lt;chr&gt; NA, &quot;We love to host p...
+## $ house_rules                                  &lt;chr&gt; &quot;No smoking indoors. P...
+## $ thumbnail_url                                &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ medium_url                                   &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ picture_url                                  &lt;chr&gt; &quot;https://a0.muscache.c...
+## $ xl_picture_url                               &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ host_id                                      &lt;dbl&gt; 266763, 227796, 266763...
+## $ host_url                                     &lt;chr&gt; &quot;https://www.airbnb.co...
+## $ host_name                                    &lt;chr&gt; &quot;Francesca&quot;, &quot;Sujatha&quot;...
+## $ host_since                                   &lt;date&gt; 2010-10-20, 2010-09-0...
+## $ host_location                                &lt;chr&gt; &quot;singapore&quot;, &quot;Singapor...
+## $ host_about                                   &lt;chr&gt; &quot;I am a private tutor ...
+## $ host_response_time                           &lt;chr&gt; &quot;within an hour&quot;, &quot;N/A...
+## $ host_response_rate                           &lt;chr&gt; &quot;100%&quot;, &quot;N/A&quot;, &quot;100%&quot;,...
+## $ host_acceptance_rate                         &lt;chr&gt; &quot;N/A&quot;, &quot;N/A&quot;, &quot;N/A&quot;, &quot;...
+## $ host_is_superhost                            &lt;lgl&gt; FALSE, FALSE, FALSE, F...
+## $ host_thumbnail_url                           &lt;chr&gt; &quot;https://a0.muscache.c...
+## $ host_picture_url                             &lt;chr&gt; &quot;https://a0.muscache.c...
+## $ host_neighbourhood                           &lt;chr&gt; &quot;Woodlands&quot;, &quot;Bukit Ti...
+## $ host_listings_count                          &lt;dbl&gt; 2, 1, 2, 8, 8, 8, 8, 4...
+## $ host_total_listings_count                    &lt;dbl&gt; 2, 1, 2, 8, 8, 8, 8, 4...
+## $ host_verifications                           &lt;chr&gt; &quot;[&#39;email&#39;, &#39;phone&#39;, &#39;f...
+## $ host_has_profile_pic                         &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE...
+## $ host_identity_verified                       &lt;lgl&gt; FALSE, FALSE, FALSE, T...
+## $ street                                       &lt;chr&gt; &quot;Singapore, Singapore&quot;...
+## $ neighbourhood                                &lt;chr&gt; &quot;Woodlands&quot;, &quot;Bukit Ti...
+## $ neighbourhood_cleansed                       &lt;chr&gt; &quot;Woodlands&quot;, &quot;Bukit Ti...
+## $ neighbourhood_group_cleansed                 &lt;chr&gt; &quot;North Region&quot;, &quot;Centr...
+## $ city                                         &lt;chr&gt; &quot;Singapore&quot;, &quot;Singapor...
+## $ state                                        &lt;chr&gt; NA, NA, NA, NA, NA, NA...
+## $ zipcode                                      &lt;chr&gt; &quot;730702&quot;, &quot;589664&quot;, NA...
+## $ market                                       &lt;chr&gt; &quot;Singapore&quot;, &quot;Singapor...
+## $ smart_location                               &lt;chr&gt; &quot;Singapore&quot;, &quot;Singapor...
+## $ country_code                                 &lt;chr&gt; &quot;SG&quot;, &quot;SG&quot;, &quot;SG&quot;, &quot;SG&quot;...
+## $ country                                      &lt;chr&gt; &quot;Singapore&quot;, &quot;Singapor...
+## $ latitude                                     &lt;dbl&gt; 1.44255, 1.33235, 1.44...
+## $ longitude                                    &lt;dbl&gt; 103.7958, 103.7852, 10...
+## $ is_location_exact                            &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE...
+## $ property_type                                &lt;chr&gt; &quot;Apartment&quot;, &quot;Apartmen...
+## $ room_type                                    &lt;chr&gt; &quot;Private room&quot;, &quot;Priva...
+## $ accommodates                                 &lt;dbl&gt; 1, 2, 1, 6, 3, 3, 6, 1...
+## $ bathrooms                                    &lt;dbl&gt; 1.0, 1.0, 1.0, 1.0, 0....
+## $ bedrooms                                     &lt;dbl&gt; 1, 1, 1, 2, 1, 1, 1, 1...
+## $ beds                                         &lt;dbl&gt; 1, 1, 1, 3, 1, 2, 7, 1...
+## $ bed_type                                     &lt;chr&gt; &quot;Real Bed&quot;, &quot;Real Bed&quot;...
+## $ amenities                                    &lt;chr&gt; &quot;{TV,\&quot;Cable TV\&quot;,Inte...
+## $ square_feet                                  &lt;dbl&gt; 0, NA, 0, 205, NA, NA,...
+## $ price                                        &lt;chr&gt; &quot;$84.00&quot;, &quot;$80.00&quot;, &quot;$...
+## $ weekly_price                                 &lt;chr&gt; NA, &quot;$400.00&quot;, NA, NA,...
+## $ monthly_price                                &lt;chr&gt; &quot;$1,048.00&quot;, &quot;$1,600.0...
+## $ security_deposit                             &lt;chr&gt; NA, NA, NA, &quot;$279.00&quot;,...
+## $ cleaning_fee                                 &lt;chr&gt; NA, NA, NA, &quot;$56.00&quot;, ...
+## $ guests_included                              &lt;dbl&gt; 1, 2, 1, 4, 1, 1, 4, 1...
+## $ extra_people                                 &lt;chr&gt; &quot;$14.00&quot;, &quot;$20.00&quot;, &quot;$...
+## $ minimum_nights                               &lt;dbl&gt; 180, 90, 6, 90, 90, 90...
+## $ maximum_nights                               &lt;dbl&gt; 360, 730, 14, 1125, 11...
+## $ minimum_minimum_nights                       &lt;dbl&gt; 180, 90, 6, 90, 90, 90...
+## $ maximum_minimum_nights                       &lt;dbl&gt; 180, 90, 6, 90, 90, 90...
+## $ minimum_maximum_nights                       &lt;dbl&gt; 360, 730, 14, 1125, 11...
+## $ maximum_maximum_nights                       &lt;dbl&gt; 360, 730, 14, 1125, 11...
+## $ minimum_nights_avg_ntm                       &lt;dbl&gt; 180, 90, 6, 90, 90, 90...
+## $ maximum_nights_avg_ntm                       &lt;dbl&gt; 360, 730, 14, 1125, 11...
+## $ calendar_updated                             &lt;chr&gt; &quot;73 months ago&quot;, &quot;71 m...
+## $ has_availability                             &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE...
+## $ availability_30                              &lt;dbl&gt; 30, 30, 30, 30, 30, 30...
+## $ availability_60                              &lt;dbl&gt; 60, 60, 60, 60, 60, 60...
+## $ availability_90                              &lt;dbl&gt; 90, 90, 90, 90, 90, 90...
+## $ availability_365                             &lt;dbl&gt; 365, 365, 365, 365, 36...
+## $ calendar_last_scraped                        &lt;date&gt; 2020-06-22, 2020-06-2...
+## $ number_of_reviews                            &lt;dbl&gt; 1, 18, 20, 20, 24, 48,...
+## $ number_of_reviews_ltm                        &lt;dbl&gt; 0, 0, 0, 8, 4, 13, 6, ...
+## $ first_review                                 &lt;date&gt; 2013-10-21, 2014-04-1...
+## $ last_review                                  &lt;date&gt; 2013-10-21, 2014-12-2...
+## $ review_scores_rating                         &lt;dbl&gt; 94, 91, 98, 89, 83, 88...
+## $ review_scores_accuracy                       &lt;dbl&gt; 10, 9, 10, 9, 8, 9, 9,...
+## $ review_scores_cleanliness                    &lt;dbl&gt; 10, 10, 10, 8, 8, 9, 8...
+## $ review_scores_checkin                        &lt;dbl&gt; 10, 10, 10, 9, 9, 9, 9...
+## $ review_scores_communication                  &lt;dbl&gt; 10, 10, 10, 10, 9, 9, ...
+## $ review_scores_location                       &lt;dbl&gt; 8, 9, 8, 9, 8, 9, 9, 1...
+## $ review_scores_value                          &lt;dbl&gt; 8, 9, 9, 9, 8, 9, 8, 1...
+## $ requires_license                             &lt;lgl&gt; FALSE, FALSE, FALSE, F...
+## $ license                                      &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ jurisdiction_names                           &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ instant_bookable                             &lt;lgl&gt; FALSE, FALSE, FALSE, T...
+## $ is_business_travel_ready                     &lt;lgl&gt; FALSE, FALSE, FALSE, F...
+## $ cancellation_policy                          &lt;chr&gt; &quot;flexible&quot;, &quot;moderate&quot;...
+## $ require_guest_profile_picture                &lt;lgl&gt; TRUE, FALSE, TRUE, FAL...
+## $ require_guest_phone_verification             &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE...
+## $ calculated_host_listings_count               &lt;dbl&gt; 2, 1, 2, 8, 8, 8, 8, 3...
+## $ calculated_host_listings_count_entire_homes  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0...
+## $ calculated_host_listings_count_private_rooms &lt;dbl&gt; 2, 1, 2, 8, 8, 8, 8, 3...
+## $ calculated_host_listings_count_shared_rooms  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0...
+## $ reviews_per_month                            &lt;dbl&gt; 0.01, 0.24, 0.18, 0.19...</code></pre>
+<p>It seems that from the 106 variables, 47 are character, 5 are date type, 15 are logical and 39 are numeric. After extensive analysis on each variable, we decided to include a minimum set that goes as follows:</p>
+<ul>
+<li><code>price</code>: cost per night</li>
+<li><code>cleaning_fee</code>: cleaning fee</li>
+<li><code>extra_people</code>: charge for having 1 extra person</li>
+<li><code>property_type</code>: type of accommodation</li>
+<li><code>room_type</code>:
+<ul>
+<li>Entire home/apt</li>
+<li>Private room</li>
+<li>Shared room</li>
+</ul></li>
+<li><code>number_of_reviews</code>: Total reviews for the listing</li>
+<li><code>review_scores_rating</code>: Average review score</li>
+<li><code>longitude</code>, <code>latitude</code>: geographical coordinates to help us locate the listing</li>
+<li><code>neighbourhood_cleansed</code>: three variables on a few major neighbourhoods in each city</li>
+</ul>
+<p>Other than these, we also decided to include the following to improve our analysis:</p>
+<ul>
+<li><code>minimum_nights</code></li>
+<li><code>host_is_superhost</code></li>
+<li><code>host_has_profile_pic</code></li>
+<li><code>host_identity_verified</code></li>
+<li><code>instant_bookable</code></li>
+<li><code>host_response_rate</code></li>
+<li><code>instant_bookable</code></li>
+<li><code>neighbourhood_group_cleansed</code></li>
+<li><code>guests_included</code></li>
+<li>’
+We will create a subset by creating vectors with these variables and then select them using <code>select()</code>. The method <code>all_of()</code> will come in handy to select columns from within a vector. We will store this new dataframe in an object called <code>airbnb_cleaned</code>.</li>
+</ul>
+<pre class="r"><code>sum(is.na(airbnb$price))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code># Establish ideal variable names in a vector
+ideal_vars&lt;- c(&quot;price&quot;,
+               &quot;cleaning_fee&quot;,
+               &quot;extra_people&quot;,
+               &quot;property_type&quot;,
+               &quot;room_type&quot;,
+               &quot;number_of_reviews&quot;,
+               &quot;review_scores_rating&quot;,
+               &quot;longitude&quot;,
+               &quot;latitude&quot;,
+               &quot;neighbourhood_cleansed&quot;)
+# Create vector with extra variables to select
+extra_vars&lt;- c(&quot;minimum_nights&quot;,
+               &quot;host_is_superhost&quot;,
+               &quot;host_has_profile_pic&quot;,
+               &quot;host_identity_verified&quot;,
+               &quot;instant_bookable&quot;,
+               &quot;neighbourhood_group_cleansed&quot;,
+               &quot;guests_included&quot;,
+               &quot;bathrooms&quot;,
+               &quot;bedrooms&quot;,
+               &quot;beds&quot;,
+               &quot;cancellation_policy&quot;,
+               &quot;review_scores_location&quot;,
+               &quot;last_review&quot;,
+               &quot;is_location_exact&quot;,
+               &quot;amenities&quot;,
+               &quot;availability_365&quot;,
+               &quot;calculated_host_listings_count&quot;, 
+               &quot;description&quot;, 
+               &quot;name&quot;)
+# Select ideal variables
+airbnb_cleaned &lt;- airbnb %&gt;%
+  
+  # all_of selects vars in a vector
+  select(all_of(c(ideal_vars, extra_vars))) # c(v1,v2) will combine both vectors into one</code></pre>
+<p>For the former point, we will use the <code>parse_number()</code> function to strip the number and convert into a <code>numerical</code> value. For the latter, it’s a bit more complicated. While discussing what should <code>NA</code> be replaced by could take hours, it is important to analyze the context. When discussing a <code>cleaning_fee</code> for AirBnB, we assume that anyone who has a specific fee will include it - therefore, the <code>NA</code> should be considered as 0. We will proceed to do a similar thing with the logical variables - we will replace those by <code>FALSE</code>, as we understand that if there is no information about being superhost, having identity verified and having a profile picture (attributes that should be easy to analyse) then those were probably FALSE. On the other hand, <code>review_scores_rating</code> will remain as <code>NA</code>, as replacing them by 0 will just affect the mean of the scores.</p>
+<pre class="r"><code># Save into new object
+airbnb_cleaned &lt;- airbnb_cleaned %&gt;% 
+  
+  # Parse numbers and strip the $
+  mutate(price = parse_number(price),
+         cleaning_fee = parse_number(cleaning_fee),
+         extra_people = parse_number(extra_people),
+         
+         # Replace NA with 0
+         cleaning_fee = case_when(
+           is.na(cleaning_fee) ~ 0,
+           TRUE ~ cleaning_fee),
+        
+          # Replace host_is_superhost missing with &quot;FALSE&quot;
+         host_is_superhost = case_when(
+           is.na(host_is_superhost) ~ FALSE,
+           TRUE ~ host_is_superhost),
+         
+         # Replace host_has_profile_ic missing with &quot;FALSE&quot;
+         host_has_profile_pic = case_when(
+           is.na(host_has_profile_pic) ~ FALSE,
+          TRUE ~ host_has_profile_pic),
+         
+         # Replace host_identity_verified missing with &quot;FALSE&quot;
+         host_identity_verified = case_when(
+           is.na(host_identity_verified) ~ FALSE,
+          TRUE ~ host_identity_verified)
+         
+         )</code></pre>
+<p>We can appreciate that now cleaning_fee has 0 <code>n_missing</code> - being part of the numerical variables. All logical variables have zero missing values as well.</p>
+<p>We will add a new variable <code>logical</code> that will tell us whether the flat has a pool or a gym.</p>
+</div>
+<div id="some-visualizations" class="section level2">
+<h2>Some Visualizations</h2>
+<p>We are going to see the most popular words used for the most expensive listings on Airbnb, by creating a word cloud of top 100 Airbnb names by price,
+First, we select the top 100 listings by price per night.</p>
+<pre class="r"><code>airbnb_description &lt;- airbnb_cleaned %&gt;% 
+  top_n(100, wt=price)</code></pre>
+<p>The following code to create a WordCloud was inspired by [How to Generate Word Clouds Article on www.towardsdatascience.com] (<a href="https://towardsdatascience.com/create-a-word-cloud-with-r-bde3e7422e8a" class="uri">https://towardsdatascience.com/create-a-word-cloud-with-r-bde3e7422e8a</a>), by Céline Van den Rul and by [How to Create a Word Cloud in R by Jyotsna Vadakkanmarveettil on <a href="https://www.jigsawacademy.com/" class="uri">https://www.jigsawacademy.com/</a>] (<a href="https://www.jigsawacademy.com/how-to-create-a-word-cloud-in-r/" class="uri">https://www.jigsawacademy.com/how-to-create-a-word-cloud-in-r/</a>)</p>
+<p>First, we cleaned the text. Next, we create a matrix with the number of occurances of these words in the top 100 listings’ names. Finally, we create the word cloud.</p>
+<pre class="r"><code>#Convert data to corpus so to use tm package
+text1&lt;-Corpus(VectorSource(airbnb_description$name))
+#Convert text to lower 
+text2&lt;-tm_map(text1,tolower)
+#Remove space 
+text2&lt;-tm_map(text2,stripWhitespace)
+#Remove numbers
+text2&lt;-tm_map(text2,removeNumbers)
+#Remove punctuations
+text2&lt;-tm_map(text2,removePunctuation)
+#Remove stopwords such as &#39;the, from&#39;
+text2&lt;-tm_map(text2,removeWords, stopwords(&#39;english&#39;))
+
+#Creates a TDM
+tdm_text&lt;-TermDocumentMatrix(text2) 
+#Convert this into a matrix format
+TDM1&lt;-as.matrix(tdm_text) 
+#Created vector in descending of apperances in text
+v = sort(rowSums(TDM1), decreasing = TRUE)
+#Created dataframes with number names and number of appereances
+dataword&lt;- data.frame(word = names(v),freq=v)
+
+#set seed to obtain same results
+seed=1055
+
+wordcloud(words = dataword$word,
+          #number of occurances
+          freq = dataword$freq, 
+          #set scale cause otherwise some words won&#39;t fit
+          scale=c(1.2,0.5), 
+          #maximum number of words displayed 
+          max.words=50, 
+          #displayed in specific order
+          random.order=FALSE, 
+          #rotation 
+          rot.per=0.35, 
+          use.r.layout=FALSE,
+          #use this color palette
+          colors=brewer.pal(8, &#39;Dark2&#39;))</code></pre>
+<p><img src="/blogs/Airbnb_files/figure-html/wordcloud-1.png" width="672" /></p>
+<p>We could see that among the most popular words to use for expensive Airbnb there are bedrooms, orchard, residences, but also predictable words such as luxury/luxurious, spacious, and private, and cozy. We notice a tendecy for terrace, orchard that makes us thing that the most expensive listings are houses.</p>
+<p>##Most popular neighbouthood</p>
+<p>We are going to look at the average price per neighbourhood and compare that with the review for the location in order to make a sense which are the best areas in Singapore.</p>
+<pre class="r"><code># Create data frame
+location_price &lt;- airbnb_cleaned%&gt;% 
+  # Group by
+  group_by(neighbourhood_group_cleansed) %&gt;% 
+  # Summarise
+  summarise(neigh_count= n(), # Count
+            # Calculate median
+            neigh_median_price=median(price), 
+            # Calculate Mean of scores (drop NAs)
+            review_score_group=mean(review_scores_location, na.rm=TRUE))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code># Plot results
+ggplot(location_price, 
+       aes(x=review_score_group, 
+           y=neigh_median_price, 
+           label= neighbourhood_group_cleansed, fill=&#39;red&#39;)) +
+ # Add scatterplot
+  geom_point(aes(size= neigh_count), pch=21) + 
+  # Add text
+  geom_text(aes(label=neighbourhood_group_cleansed), hjust=-0.07, vjust=+0.05)+
+  #Expand the plot so we can see all text
+  expand_limits(x = 9.75)+
+  
+  guides(size = guides(title= &quot;Count of properties&quot;, fill=FALSE)) +
+  # Add labels
+  labs(title=&quot;Which region is desirable?&quot;,
+       subtitle = &quot;Figure 1.8&quot;,
+       x=&quot;Review for location&quot;,
+       y=&quot;Average price per neighbourhood&quot;,
+       caption = &quot;Source: Inside Airbnb http://insideairbnb.com/index.html&quot;)+
+  theme_bw()</code></pre>
+<p><img src="/blogs/Airbnb_files/figure-html/region_distribution-1.png" width="672" />
+It seems that a very desirable place to stay is the Center, where there are a lots of Airbnb listings. Also, it seems that people dont like staying as much in the North region. That being said, it seems that the review for location is correlated with the average price for each neighborhood.</p>
+<pre><code>#### Exact Location
+
+After seeing that some neighbourhoods are more expensive and more liked than others, we can conlude that location matters. But this location needs to be exact? We are going to look at whether Airbnb that show exact location have higher prices, by performing a hypothesis testing.
+
+**H0**: Exact location does not have an influence on the price
+**H1**: Exact location does have an influence on the price.
+
+First, we plot a boxplot of the 2 means.
+
+
+
+```r
+# Create ggplot object
+exactlocation_book_price &lt;- ggplot(airbnb_cleaned, aes(is_location_exact,
+                                                 price)) +
+  
+  # Add boxplot
+  geom_boxplot() +
+  
+  # Add labels
+  labs(title = &quot;ExactLocation vs Price - How is it affected?&quot;,
+       x = &quot;Exact Location&quot;,
+       y = &quot;Price $&quot;) +
+  
+  scale_y_log10()
+# Show plot
+exactlocation_book_price</code></pre>
+<p><img src="/blogs/Airbnb_files/figure-html/exact_loc-1.png" width="672" />
+From the boxplot, we can see that there is some difference in mean. We need to further investigate that using hypothesis testing.</p>
+<pre class="r"><code>airbnb_cleaned %&gt;%
+  #Group by
+  group_by(is_location_exact) %&gt;%
+  #Filter out the NA
+  filter(!is.na(is_location_exact)) %&gt;% 
+  #Mean
+  summarise(mean_price = mean(price, na.rm = TRUE),
+            #SD
+            sd_price = sd(price, na.rm=TRUE),
+            #Count
+            count = n(),
+            #SE
+            se_price = sd_price/sqrt(count),
+            #T critical 
+            t_critical = qt(0.975, count-1), 
+            #Lower and Upper Confidence
+            lower = mean_price - t_critical * se_price,
+            upper = mean_price + t_critical * se_price
+            )</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<table class="huxtable" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  " id="tab:hyphotesis testing">
+<col><col><col><col><col><col><col><col><tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0.4pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">is_location_exact</th><th style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">mean_price</th><th style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">sd_price</th><th style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">count</th><th style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">se_price</th><th style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">t_critical</th><th style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">lower</th><th style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0.4pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">upper</th></tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0.4pt;    padding: 6pt 6pt 6pt 6pt; background-color: rgb(242, 242, 242); font-weight: normal;">FALSE</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; background-color: rgb(242, 242, 242); font-weight: normal;">145</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; background-color: rgb(242, 242, 242); font-weight: normal;">289</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; background-color: rgb(242, 242, 242); font-weight: normal;">1478</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; background-color: rgb(242, 242, 242); font-weight: normal;">7.51</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; background-color: rgb(242, 242, 242); font-weight: normal;">1.96</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; background-color: rgb(242, 242, 242); font-weight: normal;">131</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0.4pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; background-color: rgb(242, 242, 242); font-weight: normal;">160</td></tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0.4pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">TRUE</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">183</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">521</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">5845</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">6.81</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">1.96</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">170</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0.4pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">197</td></tr>
+</table>
+
+<pre class="r"><code>#The two intervals overlap, so we have to run a t test
+t.test(price ~ is_location_exact, data = airbnb_cleaned)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  price by is_location_exact
+## t = -3.761, df = 4190.5, p-value = 0.0001716
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -58.02863 -18.26053
+## sample estimates:
+## mean in group FALSE  mean in group TRUE 
+##            145.3146            183.4592</code></pre>
+<p>The confidence intervalus do not overlap, an indicator that we reject the null hyphotesis. Therefore we reject the null hypothesis that there is no significant difference between the price of an apartment showing the exact location and one that is not.</p>
+</div>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://github.com/oanamunt" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com/in/oanamntn/" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; Oana Muntean</li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>

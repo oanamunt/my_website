@@ -1,5 +1,5 @@
 ---
-title: "Who voted for Brexit?"
+title: "Who Voted in favor of Brexit?"
 author: "Oana Muntean"
 date: "`r Sys.Date()`"
 description: Does party affiliation relate to voting for/agains Brexit? What about having a degree? Or being born in the UK?

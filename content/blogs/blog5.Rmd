@@ -29,10 +29,10 @@ library(tidytext)
 ```
 
 
-# Excess rentals in TfL bike sharing
+# Excess Rentals in TFL Bike Sharing
 
 How did the bike rentals volume fluctuate in the last years?
-The data comes from public Government data on Tlf bike sharing and can be downloaded from (this)[https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx] link. We will use TfL data on how many bikes were hired every single day. We can get the latest data by running the following:
+The data comes from public Government data on Tlf bike sharing and can be downloaded from [this](https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx) link. We will use TfL data on how many bikes were hired every single day. We can get the latest data by running the following:
 
 ```{r get_tfl_data, echo=TRUE, cache=TRUE}
 url <- "https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx"
@@ -66,7 +66,7 @@ ggplot(bike_first, aes(x=dayy, y=bikes_hired, fill='red'))+
   facet_wrap(~ year + month, ncol = 12, scales = "free_x")+
   #scale_y_continuous(breaks=seq(0, 5000, by = 2500))
   theme_minimal()+
-  theme(aspect.ratio=2/1)+
+  theme(aspect.ratio=2/1.5)+
   labs(title='Tlf bike rentals fluctuations', 
        x=NULL, 
        y='Bike rentals', 
@@ -80,8 +80,9 @@ ggplot(bike_first, aes(x=dayy, y=bikes_hired, fill='red'))+
 ```
 From the graph, we could see high discrepancies in the number of bike rentals during February-April, a change that may be due to Coronavirus restrictions. To further investigate that, we are going to compare volumes of bikes rentals across years.
 
+Next, we will reproduce 2 graphs presented in LBS Statistics with R course.
 
-##Reproducing 2 graphs
+##Chnage from montly expected bike rentals
 
 ### Data Wrangling for calculationg the expected and excess rentals
 
@@ -144,6 +145,7 @@ big_table %>%
        y='Bike rentals', 
        caption = 'Source:Tlf, London Data Score')
 ```
+
 The blue line represents the average number of bikes computed monthly for the 2015- 2019 period. The thin black line represents the number of bikes rented in that specific year (computed monthly).When the number of bikes rented is smaller than the average of bikes per month (calculated from 2015-2019), the difference is depicted in red. Conversely, when the number is greater, the difference is depicted in green.
 
 **What happens on the graph?**
@@ -151,16 +153,11 @@ The blue line represents the average number of bikes computed monthly for the 20
 On the graph, we can appreciate the a growing trend of bike hirings throughout the years. In the initial years of 2015 and 2016, the service was used less than average. This might be because the infrastructure of London was less suited to bikers than in later years. Through 2017 and 2018, the bike use is seen to rise. In 2020, a large decrease is once again noted in the early months of the year. This is due to the corona-virus restrictions which confined people to their houses. Upon the lifting of the restrictions, a large resurgence of bike use can be noticed, as people hired more bikes to enjoy the outdoors and their regained freedom of movement.
 
 
-## Taking on Challenge 2 - Second graph
-The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.
+## Percentages change from weekly average
 
-We would like to reproduce the following graph:
+The next graph looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.
 
-```{r tfl_percent_change, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "tfl_weekly.png"), error = FALSE)
-```
-
-### Data Wrangling
+### Data Wrangling for next Graph
 
 We will wrangle this data again. We will create the `bike_avg_week` to estimate the average per week around years 2015-2020, and the `bike_expected_week`to appreciate the expected amount of hirings per week in 2015-2020.
 
@@ -234,5 +231,6 @@ ggplot(data = big_table_week, aes(x=week, y=change_week, group=year))+
        y = NULL)
  
 ```
+
 
 The above graph tells largely the same story as the graph shown earlier in the discussion, only this time displayed as changes with respect to a weekly average. We can once again appreciate a growing populatiry of bike use from 2015 through to 2019, a major decrease during the pandemic of early 2020, and a resurgence upon the lifting of the restrictions. 

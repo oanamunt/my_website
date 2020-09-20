@@ -11,9 +11,9 @@ image: bike.jpg
 
 
 <div id="excess-rentals-in-tfl-bike-sharing" class="section level1">
-<h1>Excess rentals in TfL bike sharing</h1>
+<h1>Excess Rentals in TFL Bike Sharing</h1>
 <p>How did the bike rentals volume fluctuate in the last years?
-The data comes from public Government data on Tlf bike sharing and can be downloaded from (this)[<a href="https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx" class="uri">https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx</a>] link. We will use TfL data on how many bikes were hired every single day. We can get the latest data by running the following:</p>
+The data comes from public Government data on Tlf bike sharing and can be downloaded from <a href="https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx">this</a> link. We will use TfL data on how many bikes were hired every single day. We can get the latest data by running the following:</p>
 <pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&quot;
 # Download TFL data to temporary file
 httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
@@ -60,7 +60,7 @@ bike_first</code></pre>
   facet_wrap(~ year + month, ncol = 12, scales = &quot;free_x&quot;)+
   #scale_y_continuous(breaks=seq(0, 5000, by = 2500))
   theme_minimal()+
-  theme(aspect.ratio=2/1)+
+  theme(aspect.ratio=2/1.5)+
   labs(title=&#39;Tlf bike rentals fluctuations&#39;, 
        x=NULL, 
        y=&#39;Bike rentals&#39;, 
@@ -71,8 +71,9 @@ bike_first</code></pre>
          # strip.background = element_rect(colour=&quot;red&quot;, fill=&quot;#CCCCFF&quot;))</code></pre>
 <pre><code>From the graph, we could see high discrepancies in the number of bike rentals during February-April, a change that may be due to Coronavirus restrictions. To further investigate that, we are going to compare volumes of bikes rentals across years.
 
+Next, we will reproduce 2 graphs presented in LBS Statistics with R course.
 
-##Reproducing 2 graphs
+##Chnage from montly expected bike rentals
 
 ### Data Wrangling for calculationg the expected and excess rentals
 
@@ -254,18 +255,16 @@ kable(head(big_table, 5))</code></pre>
        x=NULL, 
        y=&#39;Bike rentals&#39;, 
        caption = &#39;Source:Tlf, London Data Score&#39;)</code></pre>
-<p><img src="/blogs/blog5_files/figure-html/expected_number_of_rentals_per_week-1.png" width="672" />
-The blue line represents the average number of bikes computed monthly for the 2015- 2019 period. The thin black line represents the number of bikes rented in that specific year (computed monthly).When the number of bikes rented is smaller than the average of bikes per month (calculated from 2015-2019), the difference is depicted in red. Conversely, when the number is greater, the difference is depicted in green.</p>
+<p><img src="/blogs/blog5_files/figure-html/expected_number_of_rentals_per_week-1.png" width="672" /></p>
+<p>The blue line represents the average number of bikes computed monthly for the 2015- 2019 period. The thin black line represents the number of bikes rented in that specific year (computed monthly).When the number of bikes rented is smaller than the average of bikes per month (calculated from 2015-2019), the difference is depicted in red. Conversely, when the number is greater, the difference is depicted in green.</p>
 <p><strong>What happens on the graph?</strong></p>
 <p>On the graph, we can appreciate the a growing trend of bike hirings throughout the years. In the initial years of 2015 and 2016, the service was used less than average. This might be because the infrastructure of London was less suited to bikers than in later years. Through 2017 and 2018, the bike use is seen to rise. In 2020, a large decrease is once again noted in the early months of the year. This is due to the corona-virus restrictions which confined people to their houses. Upon the lifting of the restrictions, a large resurgence of bike use can be noticed, as people hired more bikes to enjoy the outdoors and their regained freedom of movement.</p>
 </div>
-<div id="taking-on-challenge-2---second-graph" class="section level2">
-<h2>Taking on Challenge 2 - Second graph</h2>
-<p>The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.</p>
-<p>We would like to reproduce the following graph:</p>
-<p><img src="C:/Users/oanam/OneDrive/Desktop/statslbs/my_website1/images/tfl_weekly.png" width="100%" /></p>
-<div id="data-wrangling" class="section level3">
-<h3>Data Wrangling</h3>
+<div id="percentages-change-from-weekly-average" class="section level2">
+<h2>Percentages change from weekly average</h2>
+<p>The next graph looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.</p>
+<div id="data-wrangling-for-next-graph" class="section level3">
+<h3>Data Wrangling for next Graph</h3>
 <p>We will wrangle this data again. We will create the <code>bike_avg_week</code> to estimate the average per week around years 2015-2020, and the <code>bike_expected_week</code>to appreciate the expected amount of hirings per week in 2015-2020.</p>
 <pre class="r"><code># Avearage per week in 2015-2020
 bike_avg_week&lt;-bike %&gt;%

@@ -12,17 +12,29 @@
     
     
     <item>
+      <title>Airbnb - WordCloud and Some Other Exploratory Analysis</title>
+      <link>/blogs/airbnb/</link>
+      <pubDate>Sun, 20 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/airbnb/</guid>
+      <description>IntroductionIn this project, we will show some visualizations of the Airbnb listings in Singapore. The data can be obtained from AirBnB insideairbnb.com; it was originally scraped from airbnb.com.
+Exploratory Data AnalysisTo begin with our project, we are going to load the listings.csv dataset and get and explore it.
+The first step is some data cleaning.
+Data WranglingWe will use the clean_names() function from the janitor library to clean the name of the columns.</description>
+    </item>
+    
+    <item>
       <title>Bike Rentals</title>
       <link>/blogs/bikerentals/</link>
       <pubDate>Sun, 20 Sep 2020 00:00:00 +0000</pubDate>
       
       <guid>/blogs/bikerentals/</guid>
-      <description>Excess rentals in TfL bike sharingHow did the bike rentals volume fluctuate in the last years?The data comes from public Government data on Tlf bike sharing and can be downloaded from (this)[https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx] link. We will use TfL data on how many bikes were hired every single day. We can get the latest data by running the following:
+      <description>Excess Rentals in TFL Bike SharingHow did the bike rentals volume fluctuate in the last years?The data comes from public Government data on Tlf bike sharing and can be downloaded from this link. We will use TfL data on how many bikes were hired every single day. We can get the latest data by running the following:
 url &amp;lt;- &amp;quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&amp;quot;# Download TFL data to temporary filehttr::GET(url, write_disk(bike.</description>
     </item>
     
     <item>
-      <title>Who voted for Brexit?</title>
+      <title>Who Voted in favor of Brexit?</title>
       <link>/blogs/brexit/</link>
       <pubDate>Sun, 20 Sep 2020 00:00:00 +0000</pubDate>
       

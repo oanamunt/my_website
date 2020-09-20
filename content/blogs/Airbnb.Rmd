@@ -1,0 +1,354 @@
+---
+title: "Airbnb - WordCloud and Some Other Exploratory Analysis"
+author: "Oana Muntean"
+date: "`r Sys.Date()`"
+description: Which words are associated with expensive Airbnb listings in Singapore? Also, which are the most desirable neighbourhoods in Singapore, according to reviews and price of Airbnb? Does displaying the exact location increase the price of Airbnb?
+draft: FALSE
+slug: airbnb
+output: html_document
+---
+
+```{r libraries, echo=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(broom)
+library(GGally)
+library(here)
+library(janitor)
+library(huxtable)
+library(skimr)
+library(knitr)
+library(mosaic)
+library(leaflet)
+library(rgdal)
+library(ggfortify)
+library(corrplot)
+library(devtools)
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(RCurl) 
+library(XML)
+library(RColorBrewer) 
+library(wordcloud2)
+```
+
+# Introduction
+
+In this project, we will show some visualizations of the Airbnb listings in Singapore. The data can be obtained from AirBnB insideairbnb.com; it was originally scraped from airbnb.com.
+
+
+# Exploratory Data Analysis
+
+To begin with our project, we are going to load the `listings.csv` dataset and get and explore it.
+
+```{r read_csv, echo=FALSE, warning=FALSE, include=FALSE}
+airbnb<-read_csv(here::here("data", "listings.csv"))
+```
+
+The first step is some data cleaning.
+
+## Data Wrangling
+
+We will use the `clean_names()` function from the `janitor` library to clean the name of the columns. This will turn `upper cases` into `lower cases`, delete `parentheses`, and replace `spaces` with `underscores`.
+
+```{r clean_names, echo=TRUE}
+# Clean names
+airbnb <- airbnb %>% 
+  clean_names()
+```
+
+We can now take a look at our data
+
+```{r glimpse, echo=TRUE}
+# Take a glimpse - airbnb
+glimpse(airbnb)
+```
+
+It seems that from the 106 variables, 47 are character, 5 are date type, 15 are logical and 39 are numeric. After extensive analysis on each variable, we decided to include a minimum set that goes as follows:
+
+- `price`: cost per night
+- `cleaning_fee`: cleaning fee
+- `extra_people`: charge for having 1 extra person
+- `property_type`: type of accommodation
+- `room_type`: 
+  - Entire home/apt
+  - Private room
+  - Shared room
+- `number_of_reviews`: Total reviews for the listing
+- `review_scores_rating`: Average review score
+- `longitude`, `latitude`: geographical coordinates to help us locate the listing
+- `neighbourhood_cleansed`: three variables on a few major neighbourhoods in each city
+
+Other than these, we also decided to include the following to improve our analysis: 
+
+- `minimum_nights`
+- `host_is_superhost`
+- `host_has_profile_pic`
+- `host_identity_verified`
+- `instant_bookable`
+- `host_response_rate`
+- `instant_bookable`
+- `neighbourhood_group_cleansed`
+- `guests_included`
+- '
+We will create a subset by creating vectors with these variables and then select them using `select()`. The method `all_of()` will come in handy to select columns from within a vector. We will store this new dataframe in an object called `airbnb_cleaned`.
+```{r check NA}
+sum(is.na(airbnb$price))
+```
+
+
+```{r select_variables, echo=TRUE}
+# Establish ideal variable names in a vector
+ideal_vars<- c("price",
+               "cleaning_fee",
+               "extra_people",
+               "property_type",
+               "room_type",
+               "number_of_reviews",
+               "review_scores_rating",
+               "longitude",
+               "latitude",
+               "neighbourhood_cleansed")
+# Create vector with extra variables to select
+extra_vars<- c("minimum_nights",
+               "host_is_superhost",
+               "host_has_profile_pic",
+               "host_identity_verified",
+               "instant_bookable",
+               "neighbourhood_group_cleansed",
+               "guests_included",
+               "bathrooms",
+               "bedrooms",
+               "beds",
+               "cancellation_policy",
+               "review_scores_location",
+               "last_review",
+               "is_location_exact",
+               "amenities",
+               "availability_365",
+               "calculated_host_listings_count", 
+               "description", 
+               "name")
+# Select ideal variables
+airbnb_cleaned <- airbnb %>%
+  
+  # all_of selects vars in a vector
+  select(all_of(c(ideal_vars, extra_vars))) # c(v1,v2) will combine both vectors into one
+```
+
+
+For the former point, we will use the `parse_number()` function to strip the number and convert into a `numerical` value. For the latter, it's a bit more complicated. While discussing what should `NA` be replaced by could take hours, it is important to analyze the context. When discussing a `cleaning_fee` for AirBnB, we assume that anyone who has a specific fee will include it - therefore, the `NA` should be considered as 0. We will proceed to do a similar thing with the logical variables - we will replace those by `FALSE`, as we understand that if there is no information about being superhost, having identity verified and having a profile picture (attributes that should be easy to analyse) then those were probably FALSE. On the other hand, `review_scores_rating` will remain as `NA`, as replacing them by 0 will just affect the mean of the scores.
+
+
+```{r parse_numbers, echo=TRUE}
+# Save into new object
+airbnb_cleaned <- airbnb_cleaned %>% 
+  
+  # Parse numbers and strip the $
+  mutate(price = parse_number(price),
+         cleaning_fee = parse_number(cleaning_fee),
+         extra_people = parse_number(extra_people),
+         
+         # Replace NA with 0
+         cleaning_fee = case_when(
+           is.na(cleaning_fee) ~ 0,
+           TRUE ~ cleaning_fee),
+        
+          # Replace host_is_superhost missing with "FALSE"
+         host_is_superhost = case_when(
+           is.na(host_is_superhost) ~ FALSE,
+           TRUE ~ host_is_superhost),
+         
+         # Replace host_has_profile_ic missing with "FALSE"
+         host_has_profile_pic = case_when(
+           is.na(host_has_profile_pic) ~ FALSE,
+          TRUE ~ host_has_profile_pic),
+         
+         # Replace host_identity_verified missing with "FALSE"
+         host_identity_verified = case_when(
+           is.na(host_identity_verified) ~ FALSE,
+          TRUE ~ host_identity_verified)
+         
+         )
+```
+
+
+
+We can appreciate that now cleaning_fee has 0 `n_missing` - being part of the numerical variables. All logical variables have zero missing values as well.
+
+We will add a new variable `logical` that will tell us whether the flat has a pool or a gym.
+
+
+## Some Visualizations
+We are going to see the most popular words used for the most expensive listings on Airbnb, by creating a word cloud of top 100 Airbnb names by price, 
+First, we select the top 100 listings by price per night.
+```{r select top}
+airbnb_description <- airbnb_cleaned %>% 
+  top_n(100, wt=price)
+```
+
+ The following code to create a WordCloud was inspired by [How to Generate Word Clouds Article on www.towardsdatascience.com] (https://towardsdatascience.com/create-a-word-cloud-with-r-bde3e7422e8a), by Céline Van den Rul and  by [How to Create a Word Cloud in R by Jyotsna Vadakkanmarveettil on https://www.jigsawacademy.com/] (https://www.jigsawacademy.com/how-to-create-a-word-cloud-in-r/)
+ 
+ First, we cleaned the text. Next, we create a matrix with the number of occurances of these words in the top 100 listings' names. Finally, we create the word cloud.
+
+```{r wordcloud, echo=TRUE, message=FALSE, warning= FALSE}
+#Convert data to corpus so to use tm package
+text1<-Corpus(VectorSource(airbnb_description$name))
+#Convert text to lower 
+text2<-tm_map(text1,tolower)
+#Remove space 
+text2<-tm_map(text2,stripWhitespace)
+#Remove numbers
+text2<-tm_map(text2,removeNumbers)
+#Remove punctuations
+text2<-tm_map(text2,removePunctuation)
+#Remove stopwords such as 'the, from'
+text2<-tm_map(text2,removeWords, stopwords('english'))
+
+#Creates a TDM
+tdm_text<-TermDocumentMatrix(text2) 
+#Convert this into a matrix format
+TDM1<-as.matrix(tdm_text) 
+#Created vector in descending of apperances in text
+v = sort(rowSums(TDM1), decreasing = TRUE)
+#Created dataframes with number names and number of appereances
+dataword<- data.frame(word = names(v),freq=v)
+
+#set seed to obtain same results
+seed=1055
+
+wordcloud(words = dataword$word,
+          #number of occurances
+          freq = dataword$freq, 
+          #set scale cause otherwise some words won't fit
+          scale=c(1.2,0.5), 
+          #maximum number of words displayed 
+          max.words=50, 
+          #displayed in specific order
+          random.order=FALSE, 
+          #rotation 
+          rot.per=0.35, 
+          use.r.layout=FALSE,
+          #use this color palette
+          colors=brewer.pal(8, 'Dark2'))
+
+```
+
+We could see that among the most popular words to use for expensive Airbnb there are bedrooms, orchard, residences, but also predictable words such as luxury/luxurious, spacious, and private, and cozy. We notice a tendecy for terrace, orchard that makes us thing that the most expensive listings are houses. 
+
+##Most popular neighbouthood
+
+We are going to look at the average price per neighbourhood and compare that with the review for the location in order to make a sense which are the best areas in Singapore.
+
+```{r region_distribution, echo=TRUE, warning=FALSE}
+# Create data frame
+location_price <- airbnb_cleaned%>% 
+  # Group by
+  group_by(neighbourhood_group_cleansed) %>% 
+  # Summarise
+  summarise(neigh_count= n(), # Count
+            # Calculate median
+            neigh_median_price=median(price), 
+            # Calculate Mean of scores (drop NAs)
+            review_score_group=mean(review_scores_location, na.rm=TRUE))
+# Plot results
+ggplot(location_price, 
+       aes(x=review_score_group, 
+           y=neigh_median_price, 
+           label= neighbourhood_group_cleansed, fill='red')) +
+ # Add scatterplot
+  geom_point(aes(size= neigh_count), pch=21) + 
+  # Add text
+  geom_text(aes(label=neighbourhood_group_cleansed), hjust=-0.07, vjust=+0.05)+
+  #Expand the plot so we can see all text
+  expand_limits(x = 9.75)+
+  
+  guides(size = guides(title= "Count of properties", fill=FALSE)) +
+  # Add labels
+  labs(title="Which region is desirable?",
+       subtitle = "Figure 1.8",
+       x="Review for location",
+       y="Average price per neighbourhood",
+       caption = "Source: Inside Airbnb http://insideairbnb.com/index.html")+
+  theme_bw()
+```
+It seems that a very desirable place to stay is the Center, where there are a lots of Airbnb listings. Also, it seems that people dont like staying as much in the North region. That being said, it seems that the review for location is correlated with the average price for each neighborhood.
+
+
+```
+#### Exact Location
+
+After seeing that some neighbourhoods are more expensive and more liked than others, we can conlude that location matters. But this location needs to be exact? We are going to look at whether Airbnb that show exact location have higher prices, by performing a hypothesis testing.
+
+**H0**: Exact location does not have an influence on the price
+**H1**: Exact location does have an influence on the price.
+
+First, we plot a boxplot of the 2 means.
+
+
+```{r exact_loc, echo=TRUE}
+# Create ggplot object
+exactlocation_book_price <- ggplot(airbnb_cleaned, aes(is_location_exact,
+                                                 price)) +
+  
+  # Add boxplot
+  geom_boxplot() +
+  
+  # Add labels
+  labs(title = "ExactLocation vs Price - How is it affected?",
+       x = "Exact Location",
+       y = "Price $") +
+  
+  scale_y_log10()
+# Show plot
+exactlocation_book_price
+``` 
+From the boxplot, we can see that there is some difference in mean. We need to further investigate that using hypothesis testing.
+
+```{r hyphotesis testing, echo=TRUE}
+airbnb_cleaned %>%
+  #Group by
+  group_by(is_location_exact) %>%
+  #Filter out the NA
+  filter(!is.na(is_location_exact)) %>% 
+  #Mean
+  summarise(mean_price = mean(price, na.rm = TRUE),
+            #SD
+            sd_price = sd(price, na.rm=TRUE),
+            #Count
+            count = n(),
+            #SE
+            se_price = sd_price/sqrt(count),
+            #T critical 
+            t_critical = qt(0.975, count-1), 
+            #Lower and Upper Confidence
+            lower = mean_price - t_critical * se_price,
+            upper = mean_price + t_critical * se_price
+            )
+
+#The two intervals overlap, so we have to run a t test
+t.test(price ~ is_location_exact, data = airbnb_cleaned)
+
+```
+The confidence intervalus do not overlap, an indicator that we reject the null hyphotesis. Therefore we reject the null hypothesis that there is no significant difference between the price of an apartment showing the exact location and one that is not.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
