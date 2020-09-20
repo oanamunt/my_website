@@ -9,7 +9,7 @@ image: bike.jpg
 ---
 
 
-```{r load-libraries, include=FALSE, echo=FALSE}
+```{r load-libraries, include= FALSE,  message =FALSE}
 library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
 library(mosaic)
 library(ggthemes)
@@ -145,7 +145,7 @@ big_table %>%
        y='Bike rentals', 
        caption = 'Source:Tlf, London Data Score')
 ```
-
+<br/>
 The blue line represents the average number of bikes computed monthly for the 2015- 2019 period. The thin black line represents the number of bikes rented in that specific year (computed monthly).When the number of bikes rented is smaller than the average of bikes per month (calculated from 2015-2019), the difference is depicted in red. Conversely, when the number is greater, the difference is depicted in green.
 
 **What happens on the graph?**
@@ -232,5 +232,5 @@ ggplot(data = big_table_week, aes(x=week, y=change_week, group=year))+
  
 ```
 
-
+<br/>
 The above graph tells largely the same story as the graph shown earlier in the discussion, only this time displayed as changes with respect to a weekly average. We can once again appreciate a growing populatiry of bike use from 2015 through to 2019, a major decrease during the pandemic of early 2020, and a resurgence upon the lifting of the restrictions. 

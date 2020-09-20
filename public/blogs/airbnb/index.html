@@ -200,7 +200,8 @@ glimpse(airbnb)</code></pre>
 ## $ calculated_host_listings_count_private_rooms &lt;dbl&gt; 2, 1, 2, 8, 8, 8, 8, 3...
 ## $ calculated_host_listings_count_shared_rooms  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0...
 ## $ reviews_per_month                            &lt;dbl&gt; 0.01, 0.24, 0.18, 0.19...</code></pre>
-<p>It seems that from the 106 variables, 47 are character, 5 are date type, 15 are logical and 39 are numeric. After extensive analysis on each variable, we decided to include a minimum set that goes as follows:</p>
+<p><br/>
+It seems that from the 106 variables, 47 are character, 5 are date type, 15 are logical and 39 are numeric. After extensive analysis on each variable, we decided to include a minimum set that goes as follows:</p>
 <ul>
 <li><code>price</code>: cost per night</li>
 <li><code>cleaning_fee</code>: cleaning fee</li>
@@ -269,7 +270,8 @@ airbnb_cleaned &lt;- airbnb %&gt;%
   
   # all_of selects vars in a vector
   select(all_of(c(ideal_vars, extra_vars))) # c(v1,v2) will combine both vectors into one</code></pre>
-<p>For the former point, we will use the <code>parse_number()</code> function to strip the number and convert into a <code>numerical</code> value. For the latter, it’s a bit more complicated. While discussing what should <code>NA</code> be replaced by could take hours, it is important to analyze the context. When discussing a <code>cleaning_fee</code> for AirBnB, we assume that anyone who has a specific fee will include it - therefore, the <code>NA</code> should be considered as 0. We will proceed to do a similar thing with the logical variables - we will replace those by <code>FALSE</code>, as we understand that if there is no information about being superhost, having identity verified and having a profile picture (attributes that should be easy to analyse) then those were probably FALSE. On the other hand, <code>review_scores_rating</code> will remain as <code>NA</code>, as replacing them by 0 will just affect the mean of the scores.</p>
+<p><br/>
+For the former point, we will use the <code>parse_number()</code> function to strip the number and convert into a <code>numerical</code> value. For the latter, it’s a bit more complicated. While discussing what should <code>NA</code> be replaced by could take hours, it is important to analyze the context. When discussing a <code>cleaning_fee</code> for AirBnB, we assume that anyone who has a specific fee will include it - therefore, the <code>NA</code> should be considered as 0. We will proceed to do a similar thing with the logical variables - we will replace those by <code>FALSE</code>, as we understand that if there is no information about being superhost, having identity verified and having a profile picture (attributes that should be easy to analyse) then those were probably FALSE. On the other hand, <code>review_scores_rating</code> will remain as <code>NA</code>, as replacing them by 0 will just affect the mean of the scores.</p>
 <pre class="r"><code># Save into new object
 airbnb_cleaned &lt;- airbnb_cleaned %&gt;% 
   
@@ -299,7 +301,8 @@ airbnb_cleaned &lt;- airbnb_cleaned %&gt;%
           TRUE ~ host_identity_verified)
          
          )</code></pre>
-<p>We can appreciate that now cleaning_fee has 0 <code>n_missing</code> - being part of the numerical variables. All logical variables have zero missing values as well.</p>
+<p><br/>
+We can appreciate that now cleaning_fee has 0 <code>n_missing</code> - being part of the numerical variables. All logical variables have zero missing values as well.</p>
 <p>We will add a new variable <code>logical</code> that will tell us whether the flat has a pool or a gym.</p>
 </div>
 <div id="some-visualizations" class="section level2">
@@ -349,8 +352,9 @@ wordcloud(words = dataword$word,
           use.r.layout=FALSE,
           #use this color palette
           colors=brewer.pal(8, &#39;Dark2&#39;))</code></pre>
-<p><img src="/blogs/Airbnb_files/figure-html/wordcloud-1.png" width="672" /></p>
-<p>We could see that among the most popular words to use for expensive Airbnb there are bedrooms, orchard, residences, but also predictable words such as luxury/luxurious, spacious, and private, and cozy. We notice a tendecy for terrace, orchard that makes us thing that the most expensive listings are houses.</p>
+<p><img src="/blogs/Airbnb_files/figure-html/wordcloud-1.png" width="672" />
+<br/>
+We could see that among the most popular words to use for expensive Airbnb there are bedrooms, orchard, residences, but also predictable words such as luxury/luxurious, spacious, and private, and cozy. We notice a tendecy for terrace, orchard that makes us thing that the most expensive listings are houses.</p>
 <p>##Most popular neighbouthood</p>
 <p>We are going to look at the average price per neighbourhood and compare that with the review for the location in order to make a sense which are the best areas in Singapore.</p>
 <pre class="r"><code># Create data frame
@@ -385,6 +389,7 @@ ggplot(location_price,
        caption = &quot;Source: Inside Airbnb http://insideairbnb.com/index.html&quot;)+
   theme_bw()</code></pre>
 <p><img src="/blogs/Airbnb_files/figure-html/region_distribution-1.png" width="672" />
+<br/>
 It seems that a very desirable place to stay is the Center, where there are a lots of Airbnb listings. Also, it seems that people dont like staying as much in the North region. That being said, it seems that the review for location is correlated with the average price for each neighborhood.</p>
 <pre><code>#### Exact Location
 
@@ -414,6 +419,7 @@ exactlocation_book_price &lt;- ggplot(airbnb_cleaned, aes(is_location_exact,
 # Show plot
 exactlocation_book_price</code></pre>
 <p><img src="/blogs/Airbnb_files/figure-html/exact_loc-1.png" width="672" />
+<br/>
 From the boxplot, we can see that there is some difference in mean. We need to further investigate that using hypothesis testing.</p>
 <pre class="r"><code>airbnb_cleaned %&gt;%
   #Group by
@@ -457,7 +463,8 @@ t.test(price ~ is_location_exact, data = airbnb_cleaned)</code></pre>
 ## sample estimates:
 ## mean in group FALSE  mean in group TRUE 
 ##            145.3146            183.4592</code></pre>
-<p>The confidence intervalus do not overlap, an indicator that we reject the null hyphotesis. Therefore we reject the null hypothesis that there is no significant difference between the price of an apartment showing the exact location and one that is not.</p>
+<p><br/>
+The confidence intervalus do not overlap, an indicator that we reject the null hyphotesis. Therefore we reject the null hypothesis that there is no significant difference between the price of an apartment showing the exact location and one that is not.</p>
 </div>
 </div>
 

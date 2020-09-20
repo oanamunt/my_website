@@ -84,11 +84,11 @@ url &lt;- &quot;https://assets.datacamp.com/production/repositories/1934/dataset
 # Download TFL data to temporary file
 httr::GET(url, write_disk(brexit.temp &lt;- tempfile(fileext = &quot;.csv&quot;)))</code></pre>
 <pre><code>## Response [https://assets.datacamp.com/production/repositories/1934/datasets/7c5ad33c949eb0042d50f8c18d538cde0c7bf4e7/brexit_results.csv]
-##   Date: 2020-09-20 18:57
+##   Date: 2020-09-20 21:16
 ##   Status: 200
 ##   Content-Type: &lt;unknown&gt;
 ##   Size: 71.4 kB
-## &lt;ON DISK&gt;  C:\Users\Public\Documents\Wondershare\CreatorTemp\RtmpsNG4q0\file590465355b16.csv</code></pre>
+## &lt;ON DISK&gt;  C:\Users\Public\Documents\Wondershare\CreatorTemp\RtmpMbJWbL\fileb72056be1f93.csv</code></pre>
 <pre class="r"><code># Use read_excel to read it as dataframe
 brexit_results &lt;- read_csv(brexit.temp)</code></pre>
 <pre><code>## Parsed with column specification:
@@ -203,7 +203,8 @@ brexit_results &lt;- read_csv(brexit.temp)</code></pre>
 </tr>
 </tbody>
 </table>
-<p>One may observe that the data in the brexit_results file is untidy, and we may want to use pivot_longer to put all the party percentages in the same column called ‘parpercent’, and the name of the party in the colomn ‘party’.</p>
+<p><br/>
+One may observe that the data in the brexit_results file is untidy, and we may want to use pivot_longer to put all the party percentages in the same column called ‘parpercent’, and the name of the party in the colomn ‘party’.</p>
 <pre class="r"><code># Tide data
 brexit_results1&lt;-brexit_results %&gt;% 
   
@@ -249,7 +250,8 @@ kable(head(brexit_results1,5))</code></pre>
 </tr>
 </tbody>
 </table>
-<p>We color each party with its specific hex color, and we add each corespondence to a vector called pal.</p>
+<p><br/>
+We color each party with its specific hex color, and we add each corespondence to a vector called pal.</p>
 <pre class="r"><code># Create vector
 pal &lt;- c(
   &quot;ld_2015&quot; = &quot;#FDBB30&quot;,
@@ -274,6 +276,7 @@ ggplot(brexit_results1, aes(x=parpercent,leave_share, color=party))+
   labs(title=&#39;How political affiliation translated to Brexit voting&#39;, x=&#39;Party % in the UK general elections&#39;, y=&#39;Leave % in the 2016 Brexit referendum&#39;)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/blogs/blog6_files/figure-html/graphics-1.png" width="672" />
+<br/>
 Looking at the graph, one may observe that the more the county is affiliated with UKIP, the more likely they are to vote for leave. The line is quite steep, which makes us think that the two variables are indeed correlated.
 Conversely, the more the country is affiliated with Liberal Democrats party, the more likely the citizens are to vote agains Brexit.</p>
 <pre class="r"><code>ggplot(brexit_results, aes(x = born_in_uk, y = leave_share)) +
@@ -285,6 +288,7 @@ x = &quot; Percent of UK Resident Born in the UK&quot;,
 y = &quot; Percent of votes cast in favor of Brexit &quot;)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/blogs/blog6_files/figure-html/brex_bornuk-1.png" width="672" />
+<br/>
 We can notice a high concetration of votes in the upper right corner, telling us that in the counties with high percentage of people born in the UK, there was a high percentage of votes in favor of Brexit.</p>
 <pre class="r"><code>sum(is.na(brexit_results$degree)) #Checking if there are any missing values</code></pre>
 <pre><code>## [1] 59</code></pre>
@@ -307,6 +311,7 @@ source= &quot;https://www.thecrosstab.com/&quot;)
 hey</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/blogs/blog6_files/figure-html/brex_degree-1.png" width="672" />
+<br/>
 We can thus infer that conties lower percentages of degree votes for Brexit more, as the line sharply decreses when the percentage of degrees increses. If only the people were more educated so Brexit would not have happened!</p>
 
                         </div>

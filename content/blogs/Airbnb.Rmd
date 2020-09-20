@@ -63,7 +63,7 @@ We can now take a look at our data
 # Take a glimpse - airbnb
 glimpse(airbnb)
 ```
-
+<br/>
 It seems that from the 106 variables, 47 are character, 5 are date type, 15 are logical and 39 are numeric. After extensive analysis on each variable, we decided to include a minimum set that goes as follows:
 
 - `price`: cost per night
@@ -136,7 +136,7 @@ airbnb_cleaned <- airbnb %>%
   select(all_of(c(ideal_vars, extra_vars))) # c(v1,v2) will combine both vectors into one
 ```
 
-
+<br/>
 For the former point, we will use the `parse_number()` function to strip the number and convert into a `numerical` value. For the latter, it's a bit more complicated. While discussing what should `NA` be replaced by could take hours, it is important to analyze the context. When discussing a `cleaning_fee` for AirBnB, we assume that anyone who has a specific fee will include it - therefore, the `NA` should be considered as 0. We will proceed to do a similar thing with the logical variables - we will replace those by `FALSE`, as we understand that if there is no information about being superhost, having identity verified and having a profile picture (attributes that should be easy to analyse) then those were probably FALSE. On the other hand, `review_scores_rating` will remain as `NA`, as replacing them by 0 will just affect the mean of the scores.
 
 
@@ -172,8 +172,7 @@ airbnb_cleaned <- airbnb_cleaned %>%
          )
 ```
 
-
-
+<br/>
 We can appreciate that now cleaning_fee has 0 `n_missing` - being part of the numerical variables. All logical variables have zero missing values as well.
 
 We will add a new variable `logical` that will tell us whether the flat has a pool or a gym.
@@ -189,7 +188,7 @@ airbnb_description <- airbnb_cleaned %>%
 
  The following code to create a WordCloud was inspired by [How to Generate Word Clouds Article on www.towardsdatascience.com] (https://towardsdatascience.com/create-a-word-cloud-with-r-bde3e7422e8a), by Céline Van den Rul and  by [How to Create a Word Cloud in R by Jyotsna Vadakkanmarveettil on https://www.jigsawacademy.com/] (https://www.jigsawacademy.com/how-to-create-a-word-cloud-in-r/)
  
- First, we cleaned the text. Next, we create a matrix with the number of occurances of these words in the top 100 listings' names. Finally, we create the word cloud.
+First, we cleaned the text. Next, we create a matrix with the number of occurances of these words in the top 100 listings' names. Finally, we create the word cloud.
 
 ```{r wordcloud, echo=TRUE, message=FALSE, warning= FALSE}
 #Convert data to corpus so to use tm package
@@ -233,7 +232,7 @@ wordcloud(words = dataword$word,
           colors=brewer.pal(8, 'Dark2'))
 
 ```
-
+<br/>
 We could see that among the most popular words to use for expensive Airbnb there are bedrooms, orchard, residences, but also predictable words such as luxury/luxurious, spacious, and private, and cozy. We notice a tendecy for terrace, orchard that makes us thing that the most expensive listings are houses. 
 
 ##Most popular neighbouthood
@@ -272,6 +271,7 @@ ggplot(location_price,
        caption = "Source: Inside Airbnb http://insideairbnb.com/index.html")+
   theme_bw()
 ```
+<br/>
 It seems that a very desirable place to stay is the Center, where there are a lots of Airbnb listings. Also, it seems that people dont like staying as much in the North region. That being said, it seems that the review for location is correlated with the average price for each neighborhood.
 
 
@@ -303,6 +303,7 @@ exactlocation_book_price <- ggplot(airbnb_cleaned, aes(is_location_exact,
 # Show plot
 exactlocation_book_price
 ``` 
+<br/>
 From the boxplot, we can see that there is some difference in mean. We need to further investigate that using hypothesis testing.
 
 ```{r hyphotesis testing, echo=TRUE}
@@ -330,6 +331,7 @@ airbnb_cleaned %>%
 t.test(price ~ is_location_exact, data = airbnb_cleaned)
 
 ```
+<br/>
 The confidence intervalus do not overlap, an indicator that we reject the null hyphotesis. Therefore we reject the null hypothesis that there is no significant difference between the price of an apartment showing the exact location and one that is not.
 
 
